@@ -1,47 +1,96 @@
-<h1>Customers</h1>
+{% load static %}
 
-<table>
-  <tr>
-    <th colspan="3"></th>
-    {% for rate in rate_types %}
-        <th colspan="2">{{rate}}</th>
-    {% endfor %}
-  </tr>
-  <tr>
-    <th>Customer Name</th>
-    <th>Customer Address</th>
-    <th>Meter Number</th>
-    {% for rate in rate_types %}
-        <th>Reading 1</th>
-        <th>Reading 2</th>
-    {% endfor %}
-  </tr>
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
 
-  {% for customer in customers %}
-  <tr>
-    <td>{{customer.name}}</td>
-    <td>{{customer.address}}</td>
-    <td>{{customer.meter_number}}</td>
-    {% for rate_name in rate_types %}
-      {% if rate_name in customer.rates %}
-        {% for key, values in customer.rates.items %}
-          {% if key == rate_name %}
-            {% for value in values %}
-              <td>{{value}}</td>
+      <link rel="stylesheet"
+          href="{% static 'css/index.css' %}">
+
+   </head>
+   <body>
+      <h1>Customers</h1>
+      <h5>Warning! The data below may not be as you expect, there was an error on
+         sheet "Customer 3" cell A6 being an incorrect name. As I would not
+          usually have access to this background information, I have used the
+           code as is so errors are incorporated.</h5>
+      <table>
+         <tr>
+            <th colspan="3"></th>
+            {% for rate in rate_types %}
+            <th colspan="2">{{rate}}</th>
             {% endfor %}
-          {% endif %}
-        {% endfor %}
-      {% else %}
-      <td>False</td>
-      <td>False</td>
+         </tr>
+         <tr>
+            <th>Customer Name</th>
+            <th>Customer Address</th>
+            <th>Meter Number</th>
+            {% for rate in rate_types %}
+            <th>Reading 1</th>
+            <th>Reading 2</th>
+            {% endfor %}
+         </tr>
+
+         {% for customer in customers %}
+         <tr>
+            <td>{{customer.name}}</td>
+            <td>{{customer.address}}</td>
+            <td>{{customer.meter_number}}</td>
+            {% for rate_name in rate_types %} 
+              {% if rate_name in customer.rates%} 
+                {% for key, values in customer.rates.items %} 
+                  {% if key == rate_name %} 
+                    {% for value in values %}
+                      <td>{{value}}</td>
+                    {% endfor %} 
+                  {% endif %}
+                {% endfor %} 
+              {% else %}
+                <td>-</td>
+                <td>-</td>
+              {% endif %} 
+            {% endfor %}
+         </tr>
+         {% endfor %}
+      </table>
+
+      <form method="POST">
+         {% csrf_token %}
+         <button type="submit">Calculate Rates</button>
+      </form>
+
+      {% if total_cost != None %}
+      <h2>Highest Calcuated Rates</h2>
+      <table>
+         <tr>
+            <th colspan="1"></th>
+            <th>Customer Name</th>
+            <th>Customer Address</th>
+            <th>Meter Number</th>
+         </tr>
+         <tr>
+            <th scope="row">Highest Total Cost</th>
+            <td>{{total_cost.name}}</td>
+            <td>{{total_cost.address}}</td>
+            <td>{{total_cost.meter_number}}</td>
+         </tr>
+         <tr>
+            <th scope="row">Highest Day Rate</th>
+            <td>{{day_rate.name}}</td>
+            <td>{{day_rate.address}}</td>
+            <td>{{day_rate.meter_number}}</td>
+         </tr>
+         <tr>
+            <th scope="row">Highest Night Rate</th>
+            <td>{{night_rate.name}}</td>
+            <td>{{night_rate.address}}</td>
+            <td>{{night_rate.meter_number}}</td>
+         </tr>
+      </table>
       {% endif %}
-    {% endfor %}
-  </tr>
-  {% endfor %}
-</table>
-
-<form method="POST">
-  {% csrf_token %}
-  <button type="submit">Calculate Rates</button>
-</form>
-
+   </body>
+</html>

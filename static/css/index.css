@@ -1,0 +1,19 @@
+table,
+th,
+td {
+   border: 1px solid black;
+   border-collapse: collapse;
+}
+
+th,
+td {
+   padding: 15px;
+}
+
+h2 {
+   padding-top: 10px;
+}
+
+button {
+   margin-top: 20px;
+}
