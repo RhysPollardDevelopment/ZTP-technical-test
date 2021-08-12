@@ -35,23 +35,36 @@ def index(request):
 
     rate_prices = data["Rate Price"]
 
-    energy_rates = []
+    rate_types = []
     for rate in rate_prices:
         if rate[0] == "Rate Name":
             continue
         else:
-            energy_rates.append(rate[0])
+            rate_types.append(rate[0])
 
     customers = []
     for sheet_name in customer_sheets:
         sheet_data = data[sheet_name]
         customer = Customer(sheet_data)
         customers.append(customer)
-        print(customer.rates)
+
+    if request.method == "POST":
+        energy_rates = []
+        for cost in rate_prices:
+            if cost[0] == "Rate Name":
+                continue
+            else:
+                energy_rates.append(cost)
+        print(energy_rates)
+
+        for customer in customers:
+            for energy_cost in energy_rates:
+                if energy
+                
 
     context = {
         "customers": customers,
-        "energy_rates": energy_rates,
+        "rate_types": rate_types,
     }
     template = "index/customers.html"
     return render(request, template, context)
